@@ -1,0 +1,77 @@
+baseurl: 'https://https://marburgopenforest.github.io/MOFexplain/'
+title: 'MOFexplain'
+publishDir: 'docs'
+theme: hugo-theme-clearwhite-gc
+languageCode: en-us
+disqusShortname: ''
+googleAnalytics: ''
+preserveTaxonomyNames: yes
+paginate: 5
+hasCJKLanguage: yes
+outputs:
+  home:
+    - HTML
+    - RSS
+    - Algolia
+params:
+  SEOTitle: MOFexplain
+  about_me: yes
+  addtional_menus:
+    - href: /top/archive/
+      title: CONTENT
+  algolia:
+    params:
+      - categories
+      - tags
+    vars:
+      - title
+      - summary
+      - date
+      - publishdate
+      - expirydate
+      - permalink
+  algolia_apiKey: ''
+  algolia_appId: ''
+  algolia_indexName: ''
+  algolia_search: no
+  ba_track_id: ''
+  bookmark_link:
+    - href: ''
+      title: ''
+  bookmarks: yes
+  description: my description
+  disqus_proxy: ''
+  disqus_site: ''
+  featured_condition_size: 1
+  featured_tags: yes
+  friend_link:
+    - href: ''
+      title: ''
+  friends: no
+  header_image: img/DJI_0127.JPG
+  image_404: img/DJI_0103.JPG
+  keyword: database university ecology geography
+  leancloud_app_id: ''
+  leancloud_app_key: ''
+  omit_categories: no
+  page_view_conter: no
+  reward: no
+  sidebar_about_description: 'MOF, Department of Geography, UMR'
+  sidebar_avatar: 'img/DJI_0118.JPG'
+  slogan: 'Documentation of databaase, data, surveys and analysis at Marburg Open Forest'
+  social:
+    email: youremail@gmail.com
+    github: https://github.com/marburgopenforest
+  title_404: :(
+outputFormats:
+  Algolia:
+    baseName: algolia
+    isPlainText: yes
+    mediaType: application/json
+    notAlternative: yes
+markup:
+  highlight:
+    style: dracula
+  tableOfContents:
+    endLevel: 3
+    startLevel: 1

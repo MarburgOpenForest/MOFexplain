@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Help on MOFgeoDB</title>
+    <link>/categories/help/</link>
+    <description>Recent content in Help on MOFgeoDB</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/help/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Wieso, weshalb, warum?</title>
+      <link>/post/about/</link>
+      <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/about/</guid>
+      <description>MOF for teaching Der Wald lässt sich wunderbar als Freiland-Experimentierfläche in vielen Kursen einsetzen. Ursprünglich in 2017 für den Master Physische Geographie überhaupt (wieder) entdeckt, wird er jetzt auch im Bachelor Geographie und Lehramt Erdkunde regelmäßig mit Studierenden besucht.
+MOF for science Have a look at Natur4.0.
+MOFgeoDB MOFgeoDB is the spatialdatabase for the Marburg Open Forest.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,358 @@
+---
+title: Triggers
+author: goettlic
+date: '2021-12-09'
+slug: []
+categories:
+  - MOFgeoDB
+tags:
+  - database
+subtitle: ''
+description: 'All custom made triggers in the MOFgeoDB'
+image: ''
+toc: yes
+output:
+  blogdown::html_page:
+    keep_md: yes
+weight: 100
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+
+</div>
+
+<div id="all-custom-made-triggers-in-the-mofgeodb" class="section level1">
+<h1>All custom made triggers in the MOFgeoDB</h1>
+<p>Triggers run automatically before or after a specific command is executed on the database. They are absolutely necessary to keep the database running. There are many more triggers which are created automatically by spatialite to keep the geometries consistent. Please remember:</p>
+<blockquote>
+<p>A TRIGGER that has not been properly tested is called a … ¡¡¡ D I S A S T E R !!!<br>
+The slightest Syntax-Error can lead to … Hard to trace, unexpected behaviour!<br>
+Since only the original author knows the purpose of the TRIGGER … No validity checks can be made.<br>
+— <cite><a href="http://www.gaia-gis.it/gaia-sins/spatialite-cookbook-5/cookbook_topics.adminstration.html#topic_Adminstration_Introduction">Alessandro Furieri</a></cite></p>
+</blockquote>
+<div id="trees" class="section level2">
+<h2>Trees</h2>
+<div id="a-new-tree-is-inserted" class="section level3">
+<h3>A new tree is inserted:</h3>
+<div id="insert_tree_create_geometry" class="section level4">
+<h4>insert_tree_create_geometry</h4>
+<p>… the geometry point is set:</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_tree_create_geometry&quot; AFTER INSERT ON &quot;tree&quot; FOR EACH ROW 
+    WHEN NEW.easting IS NOT NULL AND NEW.northing IS NOT NULL 
+    BEGIN 
+        UPDATE &quot;tree&quot; SET &quot;geometry&quot; = GeomFromText(&#39;POINT(&#39;||&quot;easting&quot;||&#39; &#39;||&quot;northing&quot;||&#39;)&#39;,25832)
+        WHERE NEW.tree_id = tree_id;
+    END;</code></pre>
+</div>
+<div id="insert_tree_create_tree_state" class="section level4">
+<h4>insert_tree_create_tree_state</h4>
+<p>… the <code>tree_state.id</code> is set to 0 (zero = first database entry)</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_tree_create_tree_state&quot; AFTER INSERT ON &quot;tree&quot; FOR EACH ROW 
+    BEGIN 
+        INSERT INTO tree_state (tree_id,creator_id,date,state_id,remarks) VALUES
+            (NEW.tree_id, NEW.creator_id, NEW.date, 0, NULL);
+    END;</code></pre>
+</div>
+</div>
+<div id="coordinates-of-the-tree-changed" class="section level3">
+<h3>Coordinates of the tree changed:</h3>
+<div id="update_tree_update_geometry" class="section level4">
+<h4>update_tree_update_geometry</h4>
+<p>… the geometry point is updated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_tree_update_geometry&quot; AFTER UPDATE ON &quot;tree&quot; FOR EACH ROW
+    WHEN NEW.easting IS NOT NULL AND NEW.northing IS NOT NULL AND (OLD.easting IS NULL OR OLD.northing IS NULL OR NEW.easting &lt;&gt; OLD.easting OR NEW.northing &lt;&gt; OLD.northing)
+    BEGIN 
+        UPDATE &quot;tree&quot; SET &quot;geometry&quot; = GeomFromText(&#39;POINT(&#39;||&quot;easting&quot;||&#39; &#39;||&quot;northing&quot;||&#39;)&#39;,25832)
+        WHERE NEW.tree_id = tree_id; 
+    END;</code></pre>
+</div>
+</div>
+<div id="new-tree_state-is-inserted" class="section level3">
+<h3>New tree_state is inserted</h3>
+<div id="delete_tree_state_auto" class="section level4">
+<h4>delete_tree_state_auto</h4>
+<p>… the automatic set tree_state is deleted</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;delete_tree_state_auto&quot; AFTER INSERT ON &quot;tree_state&quot; FOR EACH ROW
+    WHEN NEW.state_id &lt;&gt; &#39;0&#39;
+    BEGIN 
+        DELETE FROM tree_state 
+            WHERE NEW.tree_id = tree_id AND state_id = &#39;0&#39;;
+    END;</code></pre>
+</div>
+</div>
+<div id="diameter-or-perimeter-is-inserted-or-updated" class="section level3">
+<h3>Diameter or perimeter is inserted or updated</h3>
+<div id="insert_diameter_calc_perimeter" class="section level4">
+<h4>insert_diameter_calc_perimeter</h4>
+<p>… if diameter is inserted, perimeter is calculated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_diameter_calc_perimeter&quot; AFTER INSERT ON &quot;tree_diameter&quot; FOR EACH ROW 
+    WHEN NEW.diameter IS NOT NULL AND NEW.perimeter IS NULL
+    BEGIN
+        UPDATE &quot;tree_diameter&quot; SET &quot;perimeter&quot; = &quot;diameter&quot;*PI()
+        WHERE NEW.tree_id = tree_id;
+    END;</code></pre>
+</div>
+<div id="insert_perimeter_calc_diameter" class="section level4">
+<h4>insert_perimeter_calc_diameter</h4>
+<p>… if perimeter is inserted, diameter is calculated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_perimeter_calc_diameter&quot; AFTER INSERT ON &quot;tree_diameter&quot; FOR EACH ROW 
+    WHEN NEW.diameter IS NULL AND NEW.perimeter IS NOT NULL
+    BEGIN
+        UPDATE &quot;tree_diameter&quot; SET &quot;diameter&quot; = &quot;perimeter&quot;/PI()
+        WHERE NEW.tree_id = tree_id;
+    END;</code></pre>
+</div>
+<div id="update_diameter_calc_perimeter" class="section level4">
+<h4>update_diameter_calc_perimeter</h4>
+<p>… if diameter is updated, new perimeter is calculated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_diameter_calc_perimeter&quot; AFTER UPDATE ON &quot;tree_diameter&quot; FOR EACH ROW 
+    WHEN NEW.diameter IS NOT NULL AND NEW.diameter &lt;&gt; OLD.diameter
+    BEGIN
+        UPDATE &quot;tree_diameter&quot; SET &quot;perimeter&quot; = &quot;diameter&quot;*PI()
+        WHERE NEW.tree_id = tree_id;
+    END;</code></pre>
+</div>
+<div id="update_perimeter_calc_diameter" class="section level4">
+<h4>update_perimeter_calc_diameter</h4>
+<p>… if perimeter is updated, diameter is calculated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_perimeter_calc_diameter&quot; AFTER UPDATE ON &quot;tree_diameter&quot; FOR EACH ROW 
+    WHEN NEW.perimeter IS NOT NULL AND NEW.perimeter &lt;&gt; OLD.perimeter
+    BEGIN
+        UPDATE &quot;tree_diameter&quot; SET &quot;diameter&quot; = &quot;perimeter&quot;/PI()
+        WHERE NEW.tree_id = tree_id;
+    END;</code></pre>
+</div>
+</div>
+<div id="polar-coordinates-for-a-tree-are-inserted-or-updated" class="section level3">
+<h3>Polar coordinates for a tree are inserted or updated</h3>
+<div id="insert_tree_cp_update_tree" class="section level4">
+<h4>insert_tree_cp_update_tree</h4>
+<p>… the coordinates (<code>easting</code>, <code>northing</code>) are set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_tree_cp_update_tree&quot; AFTER INSERT ON &quot;tree_cp&quot; FOR EACH ROW
+WHEN NEW.tree_id IS NOT NULL AND NEW.tp_id IS NOT NULL AND NEW.angle IS NOT NULL AND NEW.distance IS NOT NULL AND NEW.valid = 1
+BEGIN
+    UPDATE &quot;tree&quot; SET 
+        &quot;easting&quot; = ( SELECT round(sin(radians(NEW.angle))*NEW.distance + tp.easting,2) AS x
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id),
+        &quot;northing&quot; = ( SELECT round(cos(radians(NEW.angle))*NEW.distance + tp.northing,2) AS y
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id)
+    WHERE tree.tree_id = NEW.tree_id AND tree.geomeasurement_id IN (6,7);
+END;</code></pre>
+<p>This triggers <code>update_tree_update_geometry</code>.</p>
+</div>
+<div id="update_tree_cp_update_tree" class="section level4">
+<h4>update_tree_cp_update_tree</h4>
+<p>… … the coordinates (<code>easting</code>, <code>northing</code>) are set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_tree_cp_update_tree&quot; AFTER UPDATE ON &quot;tree_cp&quot; FOR EACH ROW
+WHEN NEW.tree_id IS NOT NULL AND NEW.tp_id IS NOT NULL AND NEW.angle IS NOT NULL AND NEW.distance IS NOT NULL AND NEW.valid = 1 AND 
+    (NEW.tp_id &lt;&gt; OLD.tp_id OR NEW.angle &lt;&gt; OLD.angle OR NEW.distance &lt;&gt; OLD.distance OR NEW.valid &lt;&gt; OLD.valid)
+BEGIN
+    UPDATE &quot;tree&quot; SET 
+        &quot;easting&quot; = ( SELECT round(sin(radians(NEW.angle))*NEW.distance + tp.easting,2) AS x
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id),
+        &quot;northing&quot; = ( SELECT round(cos(radians(NEW.angle))*NEW.distance + tp.northing,2) AS y
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id) 
+    WHERE tree.tree_id = NEW.tree_id AND tree.geomeasurement_id IN (6,7);
+END;</code></pre>
+<p>This triggers <code>update_tree_update_geometry</code>.</p>
+</div>
+</div>
+</div>
+<div id="topopoint" class="section level2">
+<h2>Topopoint</h2>
+<div id="a-new-topopoint-is-inserted" class="section level3">
+<h3>A new topopoint is inserted:</h3>
+<div id="insert_topopoint_create_geometry" class="section level4">
+<h4>insert_topopoint_create_geometry</h4>
+<p>… the geometry point is set:</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_topopoint_create_geometry&quot; AFTER INSERT ON &quot;topopoint&quot; FOR EACH ROW 
+    WHEN NEW.easting IS NOT NULL AND NEW.northing IS NOT NULL 
+    BEGIN 
+        UPDATE &quot;topopoint&quot; SET &quot;geometry&quot; = GeomFromText(&#39;POINT(&#39;||&quot;easting&quot;||&#39; &#39;||&quot;northing&quot;||&#39;)&#39;,25832)
+        WHERE NEW.tp_id = tp_id;
+    END;</code></pre>
+</div>
+</div>
+<div id="coordinates-of-the-topopoint-changed" class="section level3">
+<h3>Coordinates of the topopoint changed:</h3>
+<div id="update_topopoint_update_geometry" class="section level4">
+<h4>update_topopoint_update_geometry</h4>
+<p>…the geometry point is updated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_topopoint_update_geometry&quot; AFTER UPDATE ON &quot;topopoint&quot; FOR EACH ROW
+    WHEN NEW.easting IS NOT NULL AND NEW.northing IS NOT NULL AND (NEW.easting &lt;&gt; OLD.easting OR NEW.northing &lt;&gt; OLD.northing)
+    BEGIN 
+        UPDATE &quot;topopoint&quot; SET &quot;geometry&quot; = GeomFromText(&#39;POINT(&#39;||&quot;easting&quot;||&#39; &#39;||&quot;northing&quot;||&#39;)&#39;,25832)
+        WHERE NEW.tp_id = tp_id;
+    END;</code></pre>
+</div>
+<div id="update_topopoint_update_plot_circle" class="section level4">
+<h4>update_topopoint_update_plot_circle</h4>
+<p>…all circular plots (<code>plot.xlength IS NOT NULL AND plot.ylength IS NULL</code>) geometry are updated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_topopoint_update_plot_circle&quot; AFTER UPDATE ON &quot;topopoint&quot; FOR EACH ROW
+    WHEN NEW.geometry &lt;&gt; OLD.geometry AND EXISTS (SELECT * FROM plot WHERE NEW.tp_id = plot.tp_id AND plot.xlength IS NOT NULL AND plot.ylength IS NULL)
+    BEGIN
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT geom FROM (SELECT p.plot_id, Buffer(NEW.geometry,p.xlength/2) AS geom FROM plot AS p 
+                        WHERE NEW.tp_id = p.tp_id) AS tpp WHERE tpp.plot_id = plot.plot_id)
+        WHERE plot_id IN (SELECT plot_id FROM plot WHERE NEW.tp_id = plot.tp_id AND plot.xlength IS NOT NULL AND plot.ylength IS NULL);
+    END;</code></pre>
+</div>
+<div id="update_topopoint_update_plot_rectangle" class="section level4">
+<h4>update_topopoint_update_plot_rectangle</h4>
+<p>…all rectangular plots (<code>plot.xlength IS NOT NULL AND plot.ylength IS NOT NULL AND plot.angle IS NOT NULL AND plot.plottype_id &lt;&gt; 'sub'</code>) geometry are updated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_topopoint_update_plot_rectangle&quot; AFTER UPDATE ON &quot;topopoint&quot; FOR EACH ROW
+    WHEN NEW.geometry &lt;&gt; OLD.geometry AND EXISTS (SELECT * FROM plot WHERE NEW.tp_id = plot.tp_id AND plot.xlength IS NOT NULL AND
+         plot.ylength IS NOT NULL AND plot.angle IS NOT NULL AND plot.plottype_id &lt;&gt; &#39;sub&#39;)
+    BEGIN 
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT geom FROM (SELECT p.plot_id, GeomFromText(&#39;POLYGON((&#39;||
+            (NEW.easting  + (sin(radians(p.angle) + atan2((p.ylength/2), (p.xlength/-2)))* sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39; &#39;||
+            (NEW.northing + (cos(radians(p.angle) + atan2((p.ylength/2), (p.xlength/-2)))* sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39;,&#39;||
+            (NEW.easting  + (sin(radians(p.angle) + atan2((p.ylength/2), (p.xlength/2))) * sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39; &#39;||
+            (NEW.northing + (cos(radians(p.angle) + atan2((p.ylength/2), (p.xlength/2))) * sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39;,&#39;||
+            (NEW.easting  + (sin(radians(p.angle) + atan2((p.ylength/-2),(p.xlength/2))) * sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39; &#39;||
+            (NEW.northing + (cos(radians(p.angle) + atan2((p.ylength/-2),(p.xlength/2))) * sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39;,&#39;||
+            (NEW.easting  + (sin(radians(p.angle) + atan2((p.ylength/-2),(p.xlength/-2)))* sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39; &#39;||
+            (NEW.northing + (cos(radians(p.angle) + atan2((p.ylength/-2),(p.xlength/-2)))* sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39;,&#39;||
+            (NEW.easting  + (sin(radians(p.angle) + atan2((p.ylength/2), (p.xlength/-2)))* sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))||&#39; &#39;||
+            (NEW.northing + (cos(radians(p.angle) + atan2((p.ylength/2), (p.xlength/-2)))* sqrt(pow(p.xlength/2,2) + pow(p.ylength/2,2))))|| &#39;))&#39;,25832)
+            AS geom FROM plot AS p WHERE NEW.tp_id = p.tp_id) AS tpp WHERE tpp.plot_id = plot.plot_id)
+        WHERE plot_id IN (SELECT plot_id FROM plot WHERE NEW.tp_id = plot.tp_id AND plot.xlength IS NOT NULL AND
+         plot.ylength IS NOT NULL AND plot.angle IS NOT NULL AND plot.plottype_id &lt;&gt; &#39;sub&#39;);
+    END;</code></pre>
+</div>
+<div id="update_topopoint_update_tree_coordinates" class="section level4">
+<h4>update_topopoint_update_tree_coordinates</h4>
+<p>…all trees depending on a central point using polar coordinates (<code>tree.geomeasurement_id IN (6,7) AND tree_cp.valid = 1</code>) coordinates are updated</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_topopoint_update_tree_coordinates&quot; AFTER UPDATE ON &quot;topopoint&quot; FOR EACH ROW
+    WHEN NEW.geometry &lt;&gt; OLD.geometry AND EXISTS (SELECT * FROM tree, tree_cp WHERE NEW.tp_id = tree_cp.tp_id AND tree_cp.tree_id = tree.tree_id AND
+         tree.geomeasurement_id IN (6,7) AND tree_cp.valid = 1)
+    BEGIN 
+        UPDATE &quot;tree&quot; SET
+            &quot;easting&quot; = (SELECT x FROM (SELECT tc.tree_id, round(sin(radians(tc.angle))*tc.distance + NEW.easting,2) AS x FROM tree_cp AS tc WHERE NEW.tp_id = tc.tp_id)
+                         AS tptc WHERE tptc.tree_id = tree.tree_id),
+            &quot;northing&quot; = (SELECT y FROM (SELECT tc.tree_id, round(cos(radians(tc.angle))*tc.distance + NEW.northing,2) AS y FROM tree_cp AS tc WHERE NEW.tp_id = tc.tp_id)
+                         AS tptc WHERE tptc.tree_id = tree.tree_id)
+        WHERE tree.tree_id IN (SELECT tree.tree_id FROM tree_cp WHERE NEW.tp_id = tree_cp.tp_id AND tree_cp.tree_id = tree.tree_id);
+    END;</code></pre>
+<p>This triggers <code>update_tree_update_geometry</code>.</p>
+</div>
+</div>
+</div>
+<div id="plots" class="section level2">
+<h2>Plots</h2>
+<div id="new-plot-is-inserted" class="section level3">
+<h3>New plot is inserted:</h3>
+<div id="insert_plot_create_circle" class="section level4">
+<h4>insert_plot_create_circle</h4>
+<p>… circular plot (<code>NEW.xlength IS NOT NULL AND NEW.ylength IS NULL</code>) is inserted, the geometry is set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_plot_create_circle&quot; AFTER INSERT ON &quot;plot&quot; FOR EACH ROW
+    WHEN NEW.tp_id IS NOT NULL AND NEW.xlength IS NOT NULL AND NEW.ylength IS NULL
+    BEGIN
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT Buffer(tp.geometry,NEW.xlength/2) FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id)
+        WHERE NEW.plot_id = plot_id;
+    END;</code></pre>
+</div>
+<div id="insert_plot_create_rectangle" class="section level4">
+<h4>insert_plot_create_rectangle</h4>
+<p>… rectangular plot (<code>NEW.xlength IS NOT NULL AND NEW.ylength IS NOT NULL AND NEW.angle IS NOT NULL AND NEW.plottype_id &lt;&gt; 'sub'</code>) is inserted, the geometry is set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_plot_create_rectangle&quot; AFTER INSERT ON &quot;plot&quot; FOR EACH ROW
+    WHEN NEW.tp_id IS NOT NULL AND NEW.xlength IS NOT NULL AND NEW.ylength IS NOT NULL AND NEW.angle IS NOT NULL AND NEW.plottype_id &lt;&gt; &#39;sub&#39;
+    BEGIN 
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT GeomFromText(&#39;POLYGON((&#39;||
+            (tp.easting   + (sin(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))|| &#39;))&#39;,25832)
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id)
+        WHERE NEW.plot_id = plot_id;
+    END;</code></pre>
+</div>
+<div id="insert_exc_plot_insert_subplots" class="section level4">
+<h4>insert_exc_plot_insert_subplots</h4>
+<p>… after new exclosure plot is inserted, the subplots are inserted</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;insert_exc_plot_insert_subplots&quot; AFTER INSERT ON &quot;plot&quot; FOR EACH ROW
+    WHEN NEW.plottype_id = &#39;exc&#39;
+    BEGIN 
+        INSERT INTO &quot;plot&quot; (plot_id,plottype_id,tp_id,creator_id,date,angle,xlength,ylength,geometry) 
+            SELECT NEW.plot_id || &quot;.&quot; || b.subplot_id AS plot_id, &#39;sub&#39; AS plottype_id, NEW.tp_id, NEW.creator_id, NEW.date, NEW.angle, NEW.xlength/b.x_factor AS xlength, NEW.ylength/b.y_factor AS ylength,
+                (SELECT GeomFromText(&#39;POLYGON((&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)), (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)), (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)), (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)), (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))|| &#39;))&#39;,25832) AS geometry
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id)
+                FROM plot AS p, lut_subplots AS b WHERE NEW.plottype_id = b.plottype_id;
+    END;</code></pre>
+</div>
+</div>
+<div id="parameters-of-the-plots-changed" class="section level3">
+<h3>parameters of the plots changed:</h3>
+<div id="update_plot_update_circle" class="section level4">
+<h4>update_plot_update_circle</h4>
+<p>… circular plot geometry is set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_plot_update_circle&quot; AFTER UPDATE ON &quot;plot&quot; FOR EACH ROW
+    WHEN NEW.tp_id IS NOT NULL AND NEW.xlength IS NOT NULL AND NEW.ylength IS NULL AND (NEW.tp_id &lt;&gt; OLD.tp_id OR NEW.xlength &lt;&gt; OLD.xlength)
+    BEGIN
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT Buffer(tp.geometry,NEW.xlength/2) FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id)
+        WHERE NEW.plot_id = plot_id;
+    END;</code></pre>
+</div>
+<div id="update_plot_update_rectangle" class="section level4">
+<h4>update_plot_update_rectangle</h4>
+<p>… rectangular plot geometry is set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_plot_update_rectangle&quot; AFTER UPDATE ON &quot;plot&quot; FOR EACH ROW
+    WHEN NEW.tp_id IS NOT NULL AND NEW.xlength IS NOT NULL AND NEW.ylength IS NOT NULL AND NEW.angle IS NOT NULL AND NEW.plottype_id &lt;&gt; &#39;sub&#39;
+        AND (NEW.tp_id &lt;&gt; OLD.tp_id OR NEW.xlength &lt;&gt; OLD.xlength OR NEW.ylength &lt;&gt; OLD.ylength OR NEW.angle &lt;&gt; OLD.angle)
+    BEGIN 
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT GeomFromText(&#39;POLYGON((&#39;||
+            (tp.easting   + (sin(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/-2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/2), (NEW.xlength/-2))) * sqrt(pow(NEW.xlength/2,2) + pow(NEW.ylength/2,2))))|| &#39;))&#39;,25832)
+            FROM topopoint AS tp WHERE NEW.tp_id = tp.tp_id)
+        WHERE NEW.plot_id = plot_id;
+    END;</code></pre>
+</div>
+<div id="update_exc_plot_update_subplots" class="section level4">
+<h4>update_exc_plot_update_subplots</h4>
+<p>… subplots of a exclosure plot geometry is set</p>
+<pre class="sql"><code>CREATE TRIGGER &quot;update_exc_plot_update_subplots&quot; AFTER UPDATE ON &quot;plot&quot; FOR EACH ROW
+    WHEN NEW.plottype_id = &#39;exc&#39;
+    BEGIN 
+        UPDATE &quot;plot&quot; SET &quot;geometry&quot; = (SELECT geom FROM (SELECT b.subplot_id, GeomFromText(&#39;POLYGON((&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)), (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)), (NEW.xlength/b.x_factor*(b.x_pos+1)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos+1),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)), (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos-1)), (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos-1),2))))||&#39;,&#39;||
+            (tp.easting  + (sin(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))||&#39; &#39;||
+            (tp.northing + (cos(radians(NEW.angle) + atan2((NEW.ylength/b.y_factor*(b.y_pos)),   (NEW.xlength/b.x_factor*(b.x_pos)))) * sqrt(pow(NEW.xlength/b.x_factor*(b.x_pos),2) + pow(NEW.ylength/b.y_factor*(b.y_pos),2))))|| &#39;))&#39;,25832)
+            AS geom FROM topopoint AS tp, plot AS p, lut_subplots AS b WHERE NEW.tp_id = tp.tp_id AND p.plottype_id = b.plottype_id) AS sp WHERE NEW.plot_id||&quot;.&quot;||sp.subplot_id = plot.plot_id)
+       WHERE plot.plot_id IN (SELECT p.plot_id FROM plot AS p, lut_subplots AS b WHERE NEW.plot_id = substr(p.plot_id, -4, length(p.plot_id)*(-1)) AND p.plottype_id = &#39;sub&#39;);            
+    END;</code></pre>
+</div>
+</div>
+</div>
+</div>

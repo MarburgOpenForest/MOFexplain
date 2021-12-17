@@ -1,0 +1,172 @@
+---
+title: 'Description MOFgeoDB'
+subtitle: ''
+description: 'General description of the spatial database MOFgeoDB'
+author: goettlic
+date: '2021-12-04'
+categories:
+  - mofgeodb
+tags:
+  - data
+  - database
+image: img/DJI_0071.JPG
+toc: yes
+output:
+  blogdown::html_page:
+    keep_md: yes
+weight: 50
+bibliography: ../../MOFbib.bib
+csl: ../../journal-of-biogeography.csl
+link-citations: true
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+
+</div>
+
+<div id="general-setting" class="section level1">
+<h1>General Setting</h1>
+<p>The MOFgeoDB is a <a href="https://www.sqlite.org/">SQlite</a> database using the spatial extension <a href="https://www.gaia-gis.it/fossil/libspatialite">spatialite</a> and serves our data of vegetation (mainly trees) and study plots for ecosystem research (forest structure, experiments) over time. Additional there are some auxiliary datasets (geopackage) of infrastructure for visual reasons. <a href="https://qgis.org/">QGIS</a> is used as back-end for analysis and visualization. All data is available at <a href="https://github.com/MarburgOpenForest/MOFgeoDB">GitHub Repo MOFgeoDB</a>.</p>
+</div>
+<div id="relational-structure" class="section level1">
+<h1>Relational Structure</h1>
+<p>First overview of the relational structure gives figure <a href="#fig:erd-complete-fig">1</a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:erd-complete-fig"></span>
+<img src="images/erd_complete.png" alt="ER diagram MOFgeoDB complete" width="800px" />
+<p class="caption">
+Figure 1: Complete ER diagram of MOFgeoDB without <code>lut_creator</code> table
+</p>
+</div>
+<p>The database can be divided into following sections:</p>
+<ul>
+<li>Trees,</li>
+<li>Plots,</li>
+<li>Lookup tables.</li>
+</ul>
+<p>When necessary the creator (referenced via <code>creator_id</code>, see fig. <a href="#fig:erd-lut-creator-fig">2</a>) and the date (day) of each single measurement is noted. Creator are stored in the look-up table <code>lut_creator</code> which can be a single person or (study) group and is designed rather simple.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:erd-lut-creator-fig"></span>
+<img src="images/erd_lut_creator_only.png" alt="Table structure lut_creator" width="58" />
+<p class="caption">
+Figure 2: Table lut_creator
+</p>
+</div>
+<div id="trees" class="section level3">
+<h3>Trees</h3>
+<p>Trees are measured as single individiums from a diameter of 7 cm. All trees have a unique identifier (<code>tree_id</code>) which is a combination of a lowercase letter (r=red, b=blue) and a five digit number. These identifiers are nailed to the real trees as in figure <a href="#fig:tree-marker">3</a> shown to identify them in the field. Beside the geolocation of the center point at surface (<code>easting</code>,<code>northing</code>) and the method of this measurement (<code>geomeasurement_id</code>, see chapter geomeasurements), the species is mandatory via the species list (<code>species_id</code> from <code>german_sl</code>, <a href="https://germansl.infinitenature.org/">GermanSL</a>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tree-marker"></span>
+<img src="images/tree-marker.png" alt="Marker on tree" width="644" />
+<p class="caption">
+Figure 3: Marker on tree as <code>tree_id</code>, here b00930
+</p>
+</div>
+<p>Geolocation is possible via a direct measurement of coordinates (usually using some sort of GNSS or terrestrial survey) or the determination via a topopoint using angle and distance as polar coordinates. <a href="../2021-12-09-triggers/">Triggers</a> calculate the coordinates on insert and update of relevant items.</p>
+<p>Following items can be additionally stored via the corresponding tables using the referencing <code>tree_id</code> and are dependent on time:</p>
+<ul>
+<li>general parameters
+<ul>
+<li>diameter: default breast height 1.3 m, <a href="../2021-12-09-triggers/">triggers</a> calculation of perimeter or diameter on circle</li>
+<li>height: method is free text</li>
+<li>state: looking up tree state via <code>state_id</code> as shown in table <a href="../2021-12-10-lookup-tables/">lut_tree_state</a>.</li>
+<li>social position: after <span class="citation"><a href="#ref-eichhorn_part_2020" role="doc-biblioref">Eichhorn et al.</a> (<a href="#ref-eichhorn_part_2020" role="doc-biblioref">2020</a>)</span> p.11</li>
+<li>vitality: after <span class="citation"><a href="#ref-roloff_baumkronen_2001" role="doc-biblioref">Roloff</a> (<a href="#ref-roloff_baumkronen_2001" role="doc-biblioref">2001</a>)</span></li>
+<li>habitat: multiple micro-habitats per tree after <span class="citation"><a href="#ref-larrieu_tree_2018-1" role="doc-biblioref">Larrieu et al.</a> (<a href="#ref-larrieu_tree_2018-1" role="doc-biblioref">2018</a>)</span></li>
+</ul></li>
+<li>special investigations
+<ul>
+<li>sapflow: some trees installed with sapflow measurement (no values available by now)</li>
+<li>dendroband: manual dendrometer, see figure foto</li>
+<li>yearring: investigation of yearrings using cores (conducted by Burkhard Neuwirth, <a href="http://www.delawi.de/">DELAWI</a>)</li>
+<li>roost: determined roosts for bats</li>
+</ul></li>
+<li>dead wood
+<ul>
+<li>lying deadwood: size and position of lying deadwood &gt;20 cm diameter</li>
+<li>decomposition: decomposition rate for deadwood after <span class="citation"><a href="#ref-schwill_handbuch_2016" role="doc-biblioref">Schwill et al.</a> (<a href="#ref-schwill_handbuch_2016" role="doc-biblioref">2016</a>)</span> p.10</li>
+</ul></li>
+</ul>
+</div>
+<div id="plots" class="section level3">
+<h3>Plots</h3>
+<p>There are different type of survey plots (see also <a href="../2021-12-10-lookup-tables/"><code>lut_plottype</code></a>):</p>
+<ul>
+<li>forest structure <strong>fs</strong></li>
+<li>exclosure plot <strong>exc</strong></li>
+<li>dendro ecology <strong>de</strong></li>
+<li>dendrometer band field <strong>dm</strong></li>
+<li>pasture structure <strong>ps</strong></li>
+<li>polygon unspecified <strong>pg</strong></li>
+<li>subplot <strong>sub</strong></li>
+</ul>
+<p>Most common is the fs-plot for forest structure survey. Most of the plots get their geolocation from a fixed benchmark in the field (see figure <a href="#fig:benchmark-fig">4</a>) documented in <code>topopoint</code>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:benchmark-fig"></span>
+<img src="images/benchmark.png" alt="Benchmark" width="644" />
+<p class="caption">
+Figure 4: Benchmark
+</p>
+</div>
+<p>The <code>plot_diary</code>can be used to document surveys on a plot linking specific actions (<code>lut_action</code>) to the desired plot and time. Automatic generation of subplots are possible and is implemented using triggers for the exclosure plot design. Triggers also manage the insertion, update and deletion of topopoints and plots.</p>
+<p>All plottypes are documented in the post <a href="../2021-12-10-plots/">Plots</a>.</p>
+</div>
+<div id="views" class="section level3">
+<h3>Views</h3>
+<p>Views are created in the database to collect data from different tables for various reasons. It is a very convenient way to work with just one table for further analysis or visualizations. It insures the use of the desired data and has the capability to generate new fields like statistical parameters. All generated views are discussed in an special <a href="../2021-12-10-views/">post</a>.</p>
+</div>
+<div id="lookup-tables" class="section level3">
+<h3>Lookup Tables</h3>
+<p>Lookup tables just serve the idea to connect recurring items using a primary key. All lookup tables are documented in a separate <a href="../2021-12-10-lookup-tables/">post</a>.</p>
+</div>
+</div>
+<div id="auxiliary-data" class="section level1">
+<h1>Auxiliary Data</h1>
+<div id="vector-data" class="section level3">
+<h3>Vector data</h3>
+<p>Other geographic datasets are stored as geopackage. In the <code>supplementary</code> geopackage following layers are available:</p>
+<ul>
+<li>streets: including footpaths, etc. based on OSM, arial images and Lidar</li>
+<li>water:</li>
+<li>forest divisions: as used by HessenForst</li>
+<li>infrastructure: point data on scietifc instruments and other POIs</li>
+<li>area plots: non scientific plots or fences</li>
+</ul>
+<p>The <code>elevation_simple</code> geopackage shows simplified contours derived from the DEM.</p>
+</div>
+<div id="qgis" class="section level3">
+<h3>QGIS</h3>
+<p>A QGIS projectfile is offered for a sophisticated cartographic representation of the data.</p>
+</div>
+</div>
+<div id="raster-data" class="section level1">
+<h1>Raster Data</h1>
+<p>All raster data is stored in seperated files as geoTiff.</p>
+<div id="uav" class="section level3">
+<h3>UAV</h3>
+<p>Orthofotos and pointclouds are generated on behalf of <a href="https://github.com/Nature40">NATUR4.0</a> from UAV raw data. More derivates are calculateted like tree segmentation, canopy heights, etc. (see somewhere? cite?)</p>
+</div>
+<div id="lidar" class="section level3">
+<h3>LIDAR</h3>
+<p>Lidar Data from the state authorities are used to calculate DEM, DGM and canopy height.</p>
+</div>
+<div id="arial-satellite-imagery" class="section level3">
+<h3>Arial / Satellite Imagery</h3>
+<p>Arial RGB orthofotos from the state authoroties and several satellite imagery (Sentinel, planetscope) are available.</p>
+</div>
+</div>
+<div id="resources" class="section level1 unnumbered">
+<h1>Resources</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-eichhorn_part_2020" class="csl-entry">
+Eichhorn, J., Roskams, P., Potočić, N., Timmermann, V., Ferretti, M., Mues, V., Szepesi, A., Durrant, D., Seletković, I., Schröck, H.-W., Nevalainen, S., Bussotti, F., Garcia, P., &amp; Wulff, S. (2020). Part <span>IV</span>: <span>Visual</span> <span>Assessment</span> of <span>Crown</span> <span>Condition</span> and <span>Damaging</span> <span>Agents</span>. In UNECE ICP Forests Programme Co-ordinating Centre (Ed.), <em>Manual on methods and criteria for harmonized sampling, assessment, monitoring and analysis of the effects of air pollution on forests</em> (Version 03/2020, p. 55). Thünen Institute of Forest Ecosystems. <a href="http://www.icp-forests.org/manual.htm">http://www.icp-forests.org/manual.htm</a>
+</div>
+<div id="ref-larrieu_tree_2018-1" class="csl-entry">
+Larrieu, L., Paillet, Y., Winter, S., Bütler, R., Kraus, D., Krumm, F., Lachat, T., Michel, A. K., Regnery, B., &amp; Vandekerkhove, K. (2018). Tree related microhabitats in temperate and <span>Mediterranean</span> <span>European</span> forests: <span>A</span> hierarchical typology for inventory standardization. <em>Ecological Indicators</em>, <em>84</em>, 194–207. <a href="https://doi.org/10.1016/j.ecolind.2017.08.051">https://doi.org/10.1016/j.ecolind.2017.08.051</a>
+</div>
+<div id="ref-roloff_baumkronen_2001" class="csl-entry">
+Roloff, A. (2001). <em>Baumkronen: <span>Verständnis</span> und praktische <span>Bedeutung</span> eines komplexen <span>Naturphänomens</span></em>. Ulmer. <a href="https://www.ulmer.de/usd-1556341/baumkronen-.html">https://www.ulmer.de/usd-1556341/baumkronen-.html</a>
+</div>
+<div id="ref-schwill_handbuch_2016" class="csl-entry">
+Schwill, S., Schleyer, E., &amp; Plane, J. (2016). <em>Handbuch <span>Waldmonitoring</span> auf <span>Flächen</span> des <span>Nationalen</span> <span>Naturerbes</span></em> (Naturstiftung David, Ed.). <a href="https://www.naturstiftung-david.de/fileadmin/Medien/Downloads/NNE_Infoportal/Monitoring/Handbuch_Waldmonitoring.pdf">https://www.naturstiftung-david.de/fileadmin/Medien/Downloads/NNE_Infoportal/Monitoring/Handbuch_Waldmonitoring.pdf</a>
+</div>
+</div>
+</div>

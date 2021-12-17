@@ -1,0 +1,47 @@
+---
+title: Plots
+author: goettlic
+date: '2021-12-10'
+slug: []
+categories:
+  - Survey
+  - Analysis
+tags:
+  - database
+  - experiment
+  - data
+subtitle: ''
+description: ''
+image: ''
+toc: yes
+output:
+  blogdown::html_page:
+    keep_md: yes
+weight: 100
+---
+# Survey Plots
+
+### Forest Structure -- fs
+Plots for surveying forest structure are setup by various student groups since 2017. The decision where to set up a plot follows no random or systematic scheme (what a pitty!) but is somehow accidential.
+
+General characteristics are:
+* circular 10m radius in horizontal plane
+* slope
+* aspect
+* remarks on special items
+
+All plots are marked with a central point (stored in `topopoint`, see fig x). 
+
+On the plot following items are surveyed depending on time:
+* all trees from 7 cm dbh
+* species
+* dbh
+* optional
+  * height
+  * micro habitats
+  * vitality
+  * social position
+  
+A plot from data out of MOFgeoDB is shown in fig. xx.
+
+All plots are visited sporadically.
