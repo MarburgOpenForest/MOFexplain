@@ -5,7 +5,7 @@ date: '2021-12-05'
 slug: []
 categories:
   - Analysis
-  - Data
+  - Survey
 tags:
   - data
   - experiment

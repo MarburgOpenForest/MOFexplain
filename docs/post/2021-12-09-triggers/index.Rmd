@@ -4,11 +4,11 @@ author: goettlic
 date: '2021-12-09'
 slug: []
 categories:
-  - mofgeodb
+  - MOFgeoDB
 tags:
   - database
 subtitle: ''
-description: ''
+description: 'All custom made triggers in the MOFgeoDB'
 image: ''
 toc: yes
 output:

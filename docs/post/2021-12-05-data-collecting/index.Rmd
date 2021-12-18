@@ -4,7 +4,7 @@ author: goettlic
 date: '2021-12-05'
 slug: []
 categories:
-  - Data
+  - Survey
 tags:
   - data
 subtitle: ''

@@ -4,7 +4,6 @@ author: goettlic
 date: '2021-12-07'
 slug: []
 categories:
-  - mofgeodb
 tags:
   - data
 subtitle: ''

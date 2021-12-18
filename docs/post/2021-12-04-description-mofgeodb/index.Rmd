@@ -14,7 +14,7 @@ toc: yes
 output:
   blogdown::html_page:
     keep_md: yes
-weight: 100
+weight: 50
 bibliography: ../../MOFbib.bib
 csl: ../../journal-of-biogeography.csl
 link-citations: true
@@ -55,7 +55,7 @@ Following items can be additionally stored via the corresponding tables using th
 * general parameters
   * diameter: default breast height 1.3 m, [triggers](../2021-12-09-triggers/) calculation of perimeter or diameter on circle
   * height: method is free text
-  * state: looking up state via `state_id` as shown in table below.
+  * state: looking up tree state via `state_id` as shown in table [lut_tree_state](../2021-12-10-lookup-tables/).
   * social position: after @eichhorn_part_2020 p.11
   * vitality: after @roloff_baumkronen_2001
   * habitat: multiple micro-habitats per tree after @larrieu_tree_2018-1

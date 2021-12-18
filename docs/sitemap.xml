@@ -2,79 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://goettlic.github.io/MOFgeoDB/top/archive/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/top/archive/</loc>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-lookup-tables/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-04-description-mofgeodb/</loc>
+    <lastmod>2021-12-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-lookup-tables/</loc>
     <lastmod>2021-12-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-plots/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/</loc>
     <lastmod>2021-12-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-views/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-views/</loc>
     <lastmod>2021-12-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-09-triggers/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-09-triggers/</loc>
     <lastmod>2021-12-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-07-literature-manuals-and-other-sources/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-07-literature-manuals-and-other-sources/</loc>
     <lastmod>2021-12-07T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-analysis/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-analysis/</loc>
     <lastmod>2021-12-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-data-collecting/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-data-collecting/</loc>
     <lastmod>2021-12-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-experiments/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-experiments/</loc>
     <lastmod>2021-12-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/2021-12-04-description-mofgeodb/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/categories/analysis/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/categories/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/tags/data/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/tags/database/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/tags/experiment/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/categories/mofgeodb/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/categories/survey/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/tags/</loc>
+    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://marburgopenforest.github.io/MOFexplain/top/about/</loc>
     <lastmod>2021-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/categories/analysis/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/categories/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/categories/data/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/tags/data/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/tags/database/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/tags/experiment/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/categories/mofgeodb/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/tags/</loc>
-    <lastmod>2021-12-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/top/about/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/top/books/</loc>
     <lastmod>2021-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/top/books/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/top/</loc>
     <lastmod>2021-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/top/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/post/about/</loc>
     <lastmod>2021-12-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/post/about/</loc>
-    <lastmod>2021-12-04T00:00:00+00:00</lastmod>
+    <loc>https://marburgopenforest.github.io/MOFexplain/search/placeholder/</loc>
   </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/search/placeholder/</loc>
-  </url><url>
-    <loc>https://goettlic.github.io/MOFgeoDB/search/</loc>
+    <loc>https://marburgopenforest.github.io/MOFexplain/search/</loc>
   </url>
 </urlset>

@@ -1,4 +1,4 @@
-baseurl: 'https://https://marburgopenforest.github.io/MOFexplain/'
+baseurl: 'https://marburgopenforest.github.io/MOFexplain/'
 title: 'MOFexplain'
 publishDir: 'docs'
 theme: hugo-theme-clearwhite-gc

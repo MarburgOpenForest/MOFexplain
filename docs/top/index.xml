@@ -2,35 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tops on MOFexplain</title>
-    <link>https://goettlic.github.io/MOFgeoDB/top/</link>
+    <link>https://marburgopenforest.github.io/MOFexplain/top/</link>
     <description>Recent content in Tops on MOFexplain</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://goettlic.github.io/MOFgeoDB/top/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 04 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://marburgopenforest.github.io/MOFexplain/top/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Content</title>
-      <link>https://goettlic.github.io/MOFgeoDB/top/archive/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/top/archive/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/top/archive/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/top/archive/</guid>
       <description></description>
     </item>
     
     <item>
       <title></title>
-      <link>https://goettlic.github.io/MOFgeoDB/top/about/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/top/about/</link>
       <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/top/about/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/top/about/</guid>
       <description>Impressum Hier aus Folder Top.</description>
     </item>
     
     <item>
       <title>Literature</title>
-      <link>https://goettlic.github.io/MOFgeoDB/top/books/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/top/books/</link>
       <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/top/books/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/top/books/</guid>
       <description>Books One book
 More Books Second Book</description>
     </item>

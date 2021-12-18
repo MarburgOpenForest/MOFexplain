@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>experiment on MOFexplain</title>
-    <link>https://marburgopenforest.github.io/MOFexplain/tags/experiment/</link>
-    <description>Recent content in experiment on MOFexplain</description>
+    <title>Survey on MOFexplain</title>
+    <link>https://marburgopenforest.github.io/MOFexplain/categories/survey/</link>
+    <description>Recent content in Survey on MOFexplain</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://marburgopenforest.github.io/MOFexplain/tags/experiment/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://marburgopenforest.github.io/MOFexplain/categories/survey/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Plots</title>
       <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/</link>
@@ -16,6 +16,16 @@
       <description>Survey Plots Forest Structure – fs Plots for surveying forest structure are setup by various student groups since 2017. The decision where to set up a plot follows no random or systematic scheme (what a pitty!) but is somehow accidential.
 General characteristics are: * circular 10m radius in horizontal plane * slope * aspect * remarks on special items
 All plots are marked with a central point (stored in topopoint, see fig x).</description>
+    </item>
+    
+    <item>
+      <title>Data Collecting</title>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-data-collecting/</link>
+      <pubDate>Sun, 05 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-data-collecting/</guid>
+      <description>General Situation Collecting data happens in various ways:
+systematic in context of research more or less chaotic in the context of teaching private to fill the gaps of 2. or any other reason automatic in a fixed time interval individual once in a lifetime or in a fixed interval  The second pretends not collecting faulty data but during courses often time is limited to collect everything is needed or the intention of the course is just focused on a special question or learning the actual method.</description>
     </item>
     
     <item>

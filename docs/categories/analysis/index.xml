@@ -2,35 +2,37 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Analysis on MOFexplain</title>
-    <link>https://goettlic.github.io/MOFgeoDB/categories/analysis/</link>
+    <link>https://marburgopenforest.github.io/MOFexplain/categories/analysis/</link>
     <description>Recent content in Analysis on MOFexplain</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://goettlic.github.io/MOFgeoDB/categories/analysis/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://marburgopenforest.github.io/MOFexplain/categories/analysis/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Plots</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-plots/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/</link>
       <pubDate>Fri, 10 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-plots/</guid>
-      <description>   Survey Plots  </description>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/</guid>
+      <description>Survey Plots Forest Structure – fs Plots for surveying forest structure are setup by various student groups since 2017. The decision where to set up a plot follows no random or systematic scheme (what a pitty!) but is somehow accidential.
+General characteristics are: * circular 10m radius in horizontal plane * slope * aspect * remarks on special items
+All plots are marked with a central point (stored in topopoint, see fig x).</description>
     </item>
     
     <item>
       <title>Views</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-views/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-views/</link>
       <pubDate>Fri, 10 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-views/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-views/</guid>
       <description>   Views  </description>
     </item>
     
     <item>
       <title>Analysis</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-analysis/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-analysis/</link>
       <pubDate>Sun, 05 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-analysis/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-analysis/</guid>
       <description>   General Situation Analysis of data happens at different stages:
 automatic statistical analysis in the database analysis in the context of individual research questions  Statistics of plots forest structure  PlotBook  Selection of fs-plot Are the plots randomly chosen and represent the mean of their surrounding?
  Neighbour trees   </description>
@@ -38,10 +40,10 @@ automatic statistical analysis in the database analysis in the context of indivi
     
     <item>
       <title>Experiments</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-experiments/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-experiments/</link>
       <pubDate>Sun, 05 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-experiments/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-experiments/</guid>
       <description>Experimentierplot Plot in Abt. Karte Foto
 Increasing Deadwood Zwei Buchen wurden xxxx gefällt und liegen gelassen. Zwei Buchen wurden xxxx geringelt, um stehendes Totholz zu erzeugen. Der Austrieb hat aber 2021 noch stattgefunden. Untersuchungen der Jahrringe (Neuwirth mit Kurs 2021) zeigen aber, das kein Zuwachs mehr stattfindet.
  Full inventory of trees Im gesamten Plot wurden im Rahmen von unterschiedlichen Kursen alle Bäume eingemssen und kartiert.

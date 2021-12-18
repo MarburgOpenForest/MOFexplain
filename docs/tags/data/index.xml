@@ -2,35 +2,47 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>data on MOFexplain</title>
-    <link>https://goettlic.github.io/MOFgeoDB/tags/data/</link>
+    <link>https://marburgopenforest.github.io/MOFexplain/tags/data/</link>
     <description>Recent content in data on MOFexplain</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://goettlic.github.io/MOFgeoDB/tags/data/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://marburgopenforest.github.io/MOFexplain/tags/data/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Description MOFgeoDB</title>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-04-description-mofgeodb/</link>
+      <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-04-description-mofgeodb/</guid>
+      <description>General Setting The MOFgeoDB is a SQlite database using the spatial extension spatialite and serves our data of vegetation (mainly trees) and study plots for ecosystem research (forest structure, experiments) over time. Additional there are some auxiliary datasets (geopackage) of infrastructure for visual reasons. QGIS is used as back-end for analysis and visualization. All data is available at GitHub Repo MOFgeoDB.
+ Relational Structure First overview of the relational structure gives figure 1.</description>
+    </item>
+    
     <item>
       <title>Plots</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-plots/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/</link>
       <pubDate>Fri, 10 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-10-plots/</guid>
-      <description>   Survey Plots  </description>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/</guid>
+      <description>Survey Plots Forest Structure – fs Plots for surveying forest structure are setup by various student groups since 2017. The decision where to set up a plot follows no random or systematic scheme (what a pitty!) but is somehow accidential.
+General characteristics are: * circular 10m radius in horizontal plane * slope * aspect * remarks on special items
+All plots are marked with a central point (stored in topopoint, see fig x).</description>
     </item>
     
     <item>
       <title>Literature, Manuals and other Sources</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-07-literature-manuals-and-other-sources/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-07-literature-manuals-and-other-sources/</link>
       <pubDate>Tue, 07 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-07-literature-manuals-and-other-sources/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-07-literature-manuals-and-other-sources/</guid>
       <description>Just all our sources: 1. Simple Features for R. (n.d.). Retrieved December 7, 2021, from https://r-spatial.github.io/sf/articles/sf1.html  Dobrovolný, L., &amp;amp; Tesař, V. (2010). Growth and characteristics of old beech (Fagus sylvatica L.) Trees individually dispersed in spruce monocultures–. Journal of Forest Science, 56(No. 9), 406–416. https://doi.org/10.17221/19/2010-JFS  Dorji, Y., Annighöfer, P., Ammer, C., &amp;amp; Seidel, D. (2019). Response of Beech (Fagus sylvatica L.) Trees to Competition—New Insights from Using Fractal Analysis.</description>
     </item>
     
     <item>
       <title>Analysis</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-analysis/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-analysis/</link>
       <pubDate>Sun, 05 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-analysis/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-analysis/</guid>
       <description>   General Situation Analysis of data happens at different stages:
 automatic statistical analysis in the database analysis in the context of individual research questions  Statistics of plots forest structure  PlotBook  Selection of fs-plot Are the plots randomly chosen and represent the mean of their surrounding?
  Neighbour trees   </description>
@@ -38,34 +50,24 @@ automatic statistical analysis in the database analysis in the context of indivi
     
     <item>
       <title>Data Collecting</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-data-collecting/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-data-collecting/</link>
       <pubDate>Sun, 05 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-data-collecting/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-data-collecting/</guid>
       <description>General Situation Collecting data happens in various ways:
 systematic in context of research more or less chaotic in the context of teaching private to fill the gaps of 2. or any other reason automatic in a fixed time interval individual once in a lifetime or in a fixed interval  The second pretends not collecting faulty data but during courses often time is limited to collect everything is needed or the intention of the course is just focused on a special question or learning the actual method.</description>
     </item>
     
     <item>
       <title>Experiments</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-experiments/</link>
+      <link>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-experiments/</link>
       <pubDate>Sun, 05 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-05-experiments/</guid>
+      <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-05-experiments/</guid>
       <description>Experimentierplot Plot in Abt. Karte Foto
 Increasing Deadwood Zwei Buchen wurden xxxx gefällt und liegen gelassen. Zwei Buchen wurden xxxx geringelt, um stehendes Totholz zu erzeugen. Der Austrieb hat aber 2021 noch stattgefunden. Untersuchungen der Jahrringe (Neuwirth mit Kurs 2021) zeigen aber, das kein Zuwachs mehr stattfindet.
  Full inventory of trees Im gesamten Plot wurden im Rahmen von unterschiedlichen Kursen alle Bäume eingemssen und kartiert.
   UAV-Plot Full inventory of trees   Natural young growth Karte</description>
-    </item>
-    
-    <item>
-      <title>Description MOFgeoDB</title>
-      <link>https://goettlic.github.io/MOFgeoDB/post/2021-12-04-description-mofgeodb/</link>
-      <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://goettlic.github.io/MOFgeoDB/post/2021-12-04-description-mofgeodb/</guid>
-      <description>General Setting The MOFgeoDB is a SQlite database using the spatial extension spatialite and serves our data of vegetation (mainly trees) and study plots for ecosystem research (forest structure, experiments) over time. Additional there are some auxiliary datasets (geopackage) of infrastructure for visual reasons. QGIS is used as back-end for analysis and visualization. All data is available at GitHub Repo MOFgeoDB.
- Relational Structure First overview of the relational structure gives figure 1.</description>
     </item>
     
   </channel>
