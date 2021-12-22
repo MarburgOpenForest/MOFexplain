@@ -217,6 +217,153 @@
 
 <div id="views" class="section level1">
 <h1>Views</h1>
+<p>Views are used to get a defined subset and collection of data from different relations. All views are nemed with a prefix <code>vw_</code>.</p>
+<div id="time-dependent-data" class="section level3">
+<h3>Time dependent data</h3>
+<p>For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the lut_tree_state table:</p>
+<pre class="sql"><code>CREATE VIEW vw_actual_tree_state AS
+    SELECT id,tree_id,creator_id, max(date) AS date, state_id, remarks FROM tree_state
+    GROUP BY tree_id;</code></pre>
+<p>Following views are implemented:</p>
+<ul>
+<li>vw_actual_tree_decomposition</li>
+<li>vw_actual_tree_dendroband^*^</li>
+<li>vw_actual_tree_diameter</li>
+<li>vw_actual_tree_habitat^*^</li>
+<li>vw_actual_tree_height</li>
+<li>vw_actual_tree_lyingdeadwood</li>
+<li>vw_actual_tree_roost</li>
+<li>vw_actual_tree_socialposition</li>
+<li>vw_actual_tree_state</li>
+<li>vw_actual_tree_vitality</li>
+</ul>
+<p>^*^Views with concatenated datafield.</p>
+</div>
+<div id="all-trees-with-actual-parameters" class="section level3">
+<h3>All trees with actual parameters:</h3>
+<p>All living trees with the actual parameters and additional information from the species list. That is the view to visualize the active trees:</p>
+<pre class="sql"><code>CREATE VIEW &quot;vw_tree_living&quot; AS
+SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;creator_id&quot; AS &quot;creator_id&quot;, &quot;a&quot;.&quot;date&quot; AS &quot;first_date&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;,
+    &quot;a&quot;.&quot;easting&quot; AS &quot;easting&quot;, &quot;a&quot;.&quot;northing&quot; AS &quot;northing&quot;, &quot;a&quot;.&quot;geomeasurement_id&quot; AS &quot;geomeasurement_id&quot;, &quot;a&quot;.&quot;status&quot; AS &quot;status&quot;, 
+    &quot;a&quot;.&quot;remarks&quot; AS &quot;remarks&quot;, &quot;a&quot;.&quot;geometry&quot; AS &quot;geometry&quot;,
+    &quot;b&quot;.&quot;creator_id&quot; AS &quot;creator_state&quot;, &quot;b&quot;.&quot;date&quot; AS &quot;state_date&quot;, &quot;b&quot;.&quot;state_id&quot; AS &quot;state_id&quot;, &quot;b&quot;.&quot;remarks&quot; AS &quot;state_remarks&quot;,
+    c.tp_id AS &quot;tp_id&quot;, c.angle AS &quot;angle&quot;, c.distance AS &quot;distance&quot;, c.valid AS &quot;valid&quot;,
+    d.color_rgb AS &quot;color_rgb&quot;,
+    &quot;e&quot;.&quot;diameter&quot; AS &quot;dbh&quot;,
+    &quot;f&quot;.&quot;height&quot; AS &quot;height&quot;, &quot;f&quot;.&quot;method&quot; AS &quot;method&quot;,
+    &quot;g&quot;.&quot;socialposition&quot; AS &quot;socialposition&quot;,
+    s.taxon_name AS &quot;taxon_name&quot;, s.taxon_author AS &quot;taxon_author&quot;, s.nativename AS &quot;nativename&quot;
+FROM &quot;tree&quot; AS &quot;a&quot;
+JOIN &quot;vw_actual_tree_state&quot; AS &quot;b&quot; USING (&quot;tree_id&quot;)
+Left JOIN tree_cp AS c USING (tree_id)
+JOIN lut_tree_species AS d USING (species_id)
+Left JOIN (SELECT * FROM &quot;vw_actual_tree_diameter&quot; WHERE measurement_height = 1.3) AS &quot;e&quot; USING (&quot;tree_id&quot;)
+Left JOIN vw_actual_tree_height AS &quot;f&quot; USING (&quot;tree_id&quot;)
+Left JOIN &quot;vw_actual_tree_socialposition&quot; AS &quot;g&quot; USING (&quot;tree_id&quot;)
+JOIN germansl_species AS s USING (species_id)
+WHERE b.state_id IN (&#39;0&#39;,&#39;1.1&#39;,&#39;1.2&#39;, &#39;3.3&#39;, &#39;3.4&#39;)
+ORDER BY &quot;a&quot;.&quot;tree_id&quot;;</code></pre>
+</div>
+<div id="dead-trees" class="section level3">
+<h3>Dead trees</h3>
+<p>All dead trees (standing and lying) are composed respectivly with:</p>
+<pre class="sql"><code>CREATE VIEW &quot;vw_tree_dead&quot; AS
+SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;creator_id&quot; AS &quot;creator_id&quot;, &quot;a&quot;.&quot;date&quot; AS &quot;first_date&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;,
+    &quot;a&quot;.&quot;easting&quot; AS &quot;easting&quot;, &quot;a&quot;.&quot;northing&quot; AS &quot;northing&quot;, &quot;a&quot;.&quot;geomeasurement_id&quot; AS &quot;geomeasurement_id&quot;, &quot;a&quot;.&quot;status&quot; AS &quot;status&quot;, 
+    &quot;a&quot;.&quot;remarks&quot; AS &quot;remarks&quot;, &quot;a&quot;.&quot;geometry&quot; AS &quot;geometry&quot;,
+    &quot;b&quot;.&quot;creator_id&quot; AS &quot;creator_state&quot;, &quot;b&quot;.&quot;date&quot; AS &quot;state_date&quot;, &quot;b&quot;.&quot;state_id&quot; AS &quot;state_id&quot;, &quot;b&quot;.&quot;remarks&quot; AS &quot;state_remarks&quot;,
+    c.tp_id AS &quot;tp_id&quot;, c.angle AS &quot;angle&quot;, c.distance AS &quot;distance&quot;, c.valid AS &quot;valid&quot;,
+    d.color_rgb AS &quot;color_rgb&quot;,
+    &quot;e&quot;.&quot;diameter&quot; AS &quot;dbh&quot;, &quot;e_zero&quot;.&quot;diameter&quot; AS &quot;d_basal&quot;,
+    &quot;f&quot;.&quot;height&quot; AS &quot;height&quot;, &quot;f&quot;.&quot;method&quot; AS &quot;method&quot;,
+    g.decomposition AS &quot;decomposition&quot;,
+    s.taxon_name AS &quot;taxon_name&quot;, s.taxon_author AS &quot;taxon_author&quot;, s.nativename AS &quot;nativename&quot;
+FROM &quot;tree&quot; AS &quot;a&quot;
+JOIN &quot;vw_actual_tree_state&quot; AS &quot;b&quot; USING (&quot;tree_id&quot;)
+Left JOIN tree_cp AS c USING (tree_id)
+JOIN lut_tree_species AS d USING (species_id)
+Left JOIN (SELECT * FROM &quot;vw_actual_tree_diameter&quot; WHERE measurement_height = 1.3) AS &quot;e&quot; USING (&quot;tree_id&quot;)
+Left JOIN (SELECT * FROM &quot;vw_actual_tree_diameter&quot; WHERE measurement_height = 0) AS &quot;e_zero&quot; USING (&quot;tree_id&quot;)
+Left JOIN vw_actual_tree_height AS &quot;f&quot; USING (&quot;tree_id&quot;)
+Left JOIN vw_actual_tree_decomposition AS &quot;g&quot; USING (&quot;tree_id&quot;)
+JOIN germansl_species AS s USING (species_id)
+WHERE b.state_id IN (&#39;2.1&#39;,&#39;2.2&#39;,&#39;2.3&#39;,&#39;2.4&#39;, &#39;2.5&#39;, &#39;3.1&#39;, &#39;3.2&#39;)
+ORDER BY &quot;a&quot;.&quot;tree_id&quot;;</code></pre>
+</div>
+<div id="tree-history" class="section level3">
+<h3>Tree history</h3>
+<p>The history in changing of the tree_state is compiled with concatenated fields:</p>
+<pre class="sql"><code>CREATE VIEW &quot;vw_tree_history&quot; AS
+SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;creator_id&quot; AS &quot;creator_id&quot;, &quot;a&quot;.&quot;date&quot; AS &quot;first_date&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;,
+    &quot;a&quot;.&quot;easting&quot; AS &quot;easting&quot;, &quot;a&quot;.&quot;northing&quot; AS &quot;northing&quot;, &quot;a&quot;.&quot;geomeasurement_id&quot; AS &quot;geomeasurement_id&quot;, &quot;a&quot;.&quot;status&quot; AS &quot;status&quot;, 
+    &quot;a&quot;.&quot;remarks&quot; AS &quot;remarks&quot;, &quot;a&quot;.&quot;geometry&quot; AS &quot;geometry&quot;,
+        group_concat(&quot;b&quot;.&quot;state_id&quot;) AS &quot;state_id_history&quot;, group_concat(&quot;b&quot;.&quot;date&quot;) AS &quot;date_history&quot;
+FROM &quot;tree&quot; AS &quot;a&quot; 
+LEFT JOIN &quot;tree_state&quot; AS &quot;b&quot; USING (&quot;tree_id&quot;) 
+GROUP BY b.tree_id
+ORDER BY &quot;a&quot;.&quot;tree_id&quot;;</code></pre>
+</div>
+<div id="special-trees" class="section level3">
+<h3>Special trees</h3>
+<p>Trees with a special investigation are combined with the values from the <code>vw_actual_tree_X</code>. Special investigations are for</p>
+<ul>
+<li>micro habitats</li>
+<li>dendrometer bands</li>
+<li>sapflow</li>
+<li>roosts (bats)</li>
+<li>yearring</li>
+</ul>
+<p>For example the view on the micro habitat trees looks like:</p>
+<pre class="sql"><code>CREATE VIEW &quot;vw_tree_habitat&quot; AS
+SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;, &quot;a&quot;.&quot;geometry&quot; AS &quot;geometry&quot;,
+    &quot;b&quot;.&quot;date&quot; AS &quot;state_date&quot;, &quot;b&quot;.&quot;state_id&quot; AS &quot;state_id&quot;, &quot;b&quot;.&quot;remarks&quot; AS &quot;state_remarks&quot;,
+    &quot;d&quot;.&quot;diameter&quot; AS &quot;dbh&quot;,
+    &quot;e&quot;.&quot;creator_id&quot; AS &quot;habitat_creator_id&quot;, &quot;e&quot;.&quot;date&quot; AS &quot;date&quot;, &quot;e&quot;.&quot;habitatfeature&quot; AS &quot;habitatfeature&quot;, &quot;e&quot;.&quot;habitatvalue&quot; AS &quot;habitatvalue&quot;, &quot;e&quot;.&quot;remarks&quot; AS &quot;habitat_remarks&quot;
+FROM &quot;tree&quot; AS &quot;a&quot;
+JOIN &quot;vw_actual_tree_state&quot; AS &quot;b&quot; USING (&quot;tree_id&quot;)
+Left JOIN (SELECT * FROM &quot;vw_actual_tree_diameter&quot; WHERE measurement_height = 1.3) AS &quot;d&quot; USING (&quot;tree_id&quot;)
+JOIN vw_actual_tree_habitat AS e USING (tree_id)
+ORDER BY &quot;a&quot;.&quot;tree_id&quot;;</code></pre>
+<p>More information on the special investigations can be found under the <a href="https://marburgopenforest.github.io/MOFexplain/categories/analysis/">Analysis section</a></p>
+</div>
+<div id="herblayer" class="section level3">
+<h3>Herblayer</h3>
+<p>To get the species list for the herblayer following view is established:</p>
+<pre class="sql"><code>CREATE VIEW &quot;vw_species_herblayer&quot; AS
+Select phl.plot_diary_id, phl.species_id, group_concat(DISTINCT phl.status) AS status, group_concat(phl.cover_bb,&#39;;&#39;) AS cover_bb, 
+    round(avg(phl.cover_percent),2) AS cover_percent, group_concat(phl.voucher,&#39;;&#39;) AS voucher, group_concat(phl.note,&#39;;&#39;) AS note,
+    group_concat(substr(phl.subplot_id,-3),&#39;;&#39;) AS subplots, count() AS no_subplots,
+    spec.taxon_name, spec.taxon_author, spec.synonym, spec.nativename, spec.taxon_rank, spec.division, spec.taxon_parent_id,
+    pd.plot_id, pd.creator_id, pd.date, pd.action_id, pd.notice 
+From plot_herblayer AS phl
+JOIN germansl_species AS spec USING (species_id)
+Join plot_diary AS pd ON phl.plot_diary_id = pd.id
+Where plot_diary_id IN (Select id from (
+    Select *, max(pd.date) FROM plot_diary AS pd 
+    WHERE pd.action_id = 5 --alle Krautschichtaufnahmen
+    Group By pd.plot_id )) 
+Group By plot_diary_id, species_id
+Order By plot_diary_id;</code></pre>
+</div>
+<div id="plots" class="section level3">
+<h3>Plots</h3>
+<p>The different types of plots are distinguished with various views. Following types of plots are implemented by now:</p>
+<ul>
+<li>forest structure - fs</li>
+<li>exclosure experiments - exp</li>
+<li>dendrometer band fields - dm</li>
+<li>dendro-ecology - de</li>
+<li>pasture structure - ps</li>
+</ul>
+<p>All general information for a forest structure plot is determined with:</p>
+<pre class="sql"><code>CREATE VIEW &quot;vw_plot_fs&quot; AS
+SELECT a.&quot;id&quot; AS &quot;id&quot;, a.&quot;plot_id&quot; AS &quot;plot_id&quot;, a.&quot;plottype_id&quot; AS &quot;plottype_id&quot;, a.&quot;creator_id&quot; AS &quot;creator_id&quot;, a.&quot;status&quot; AS &quot;status&quot;,
+    a.&quot;date&quot; AS &quot;dateFirstSurvey&quot;, a.&quot;slope&quot; AS &quot;slope&quot;, a.&quot;aspect&quot; AS &quot;aspect&quot;, a.&quot;angle&quot; AS &quot;angle&quot;, a.&quot;xlength&quot; AS &quot;xlength&quot;, a.&quot;ylength&quot; AS &quot;ylength&quot;,
+    a.&quot;remarks&quot; AS &quot;remarks&quot;, a.&quot;geometry&quot; AS &quot;geometry&quot;
+FROM &quot;plot&quot; As a
+WHERE a.plottype_id = &#39;fs&#39;
+Order By a.plot_id;</code></pre>
+</div>
 </div>
 
                 <style>

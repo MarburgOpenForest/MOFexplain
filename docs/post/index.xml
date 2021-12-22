@@ -43,7 +43,9 @@ All plots are marked with a central point (stored in topopoint, see fig x).</des
       <pubDate>Fri, 10 Dec 2021 00:00:00 +0000</pubDate>
       
       <guid>https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-views/</guid>
-      <description>   Views  </description>
+      <description>Views Views are used to get a defined subset and collection of data from different relations. All views are nemed with a prefix vw_.
+Time dependent data For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the lut_tree_state table:
+CREATE VIEW vw_actual_tree_state AS SELECT id,tree_id,creator_id, max(date) AS date, state_id, remarks FROM tree_state GROUP BY tree_id; Following views are implemented:</description>
     </item>
     
     <item>
@@ -96,17 +98,6 @@ systematic in context of research more or less chaotic in the context of teachin
 Increasing Deadwood Zwei Buchen wurden xxxx gefällt und liegen gelassen. Zwei Buchen wurden xxxx geringelt, um stehendes Totholz zu erzeugen. Der Austrieb hat aber 2021 noch stattgefunden. Untersuchungen der Jahrringe (Neuwirth mit Kurs 2021) zeigen aber, das kein Zuwachs mehr stattfindet.
  Full inventory of trees Im gesamten Plot wurden im Rahmen von unterschiedlichen Kursen alle Bäume eingemssen und kartiert.
   UAV-Plot Full inventory of trees   Natural young growth Karte</description>
-    </item>
-    
-    <item>
-      <title>Wieso, weshalb, warum?</title>
-      <link>https://marburgopenforest.github.io/MOFexplain/post/about/</link>
-      <pubDate>Sat, 04 Dec 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://marburgopenforest.github.io/MOFexplain/post/about/</guid>
-      <description>MOF for teaching Der Wald lässt sich wunderbar als Freiland-Experimentierfläche in vielen Kursen einsetzen. Ursprünglich in 2017 für den Master Physische Geographie überhaupt (wieder) entdeckt, wird er jetzt auch im Bachelor Geographie und Lehramt Erdkunde regelmäßig mit Studierenden besucht.
-MOF for science Have a look at Natur4.0.
-MOFgeoDB MOFgeoDB is the spatialdatabase for the Marburg Open Forest.</description>
     </item>
     
   </channel>

@@ -176,7 +176,7 @@
                 <div class="site-heading">
                     <h1>MOFexplain </h1>
                     
-		    <span class="subheading">Documentation of databaase, data, surveys and analysis at Marburg Open Forest</span>
+		    <span class="subheading">Documentation of database, data, surveys and analysis at Marburg Open Forest</span>
                 </div>
             </div>
         </div>
@@ -226,7 +226,9 @@ All plots are marked with a central point (stored in topopoint, see fig x).
 	
         <div class="post-content-preview">
 	
-               Views  
+            Views Views are used to get a defined subset and collection of data from different relations. All views are nemed with a prefix vw_.
+Time dependent data For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the lut_tree_state table:
+CREATE VIEW vw_actual_tree_state AS SELECT id,tree_id,creator_id, max(date) AS date, state_id, remarks FROM tree_state GROUP BY tree_id; Following views are implemented:
        
         </div>
     </a>
