@@ -46,10 +46,16 @@ On the plot following items are surveyed depending on time:
   * vitality
   * social position
   
-A plot from data out of MOFgeoDB is shown in figure \@ref(fig:fs-plot-fif).
+A plot from data out of MOFgeoDB is shown in figure \@ref(fig:fs-plot-fig).
 
-```{r fs-plot-fig, echo=FALSE, fig.align='center', fig.cap='fs.004 as example for the visualization of the plot data in QGIS.', fig.alt='Example of fs-plot'}
-knitr::include_graphics("images/benchmark.png")
+```{r fs-plot-fig, echo=FALSE, fig.align='center', fig.cap='fs-004 as example for the visualization of the plot data in QGIS.', fig.alt='Example of fs-plot'}
+knitr::include_graphics("images/fs-004_plotExample.png")
 ```
+In real the plot looks something like this:
+```{r fs-004-summerPano-fig, echo=FALSE, fig.align='center', fig.cap='Panoramic view of fs-004 in summer.', fig.alt='SUmmer pano of fs-004'}
+knitr::include_graphics("images/fs-004_summerPano.jpg")
+```
+
+
 
 All plots are visited sporadically. The locations are shown in figure XXX
