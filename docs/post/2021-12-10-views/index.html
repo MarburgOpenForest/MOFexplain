@@ -21,9 +21,9 @@
     
 
     
-    <meta name="description" content="my description">
-    <meta property="og:description" content="my description" />
-    <meta property="twitter:description" content="my description" />
+    <meta name="description" content="Views are used to get a defined subset and collection of data from different relations.">
+    <meta property="og:description" content="Views are used to get a defined subset and collection of data from different relations." />
+    <meta property="twitter:description" content="Views are used to get a defined subset and collection of data from different relations." />
     
 
     
@@ -220,16 +220,16 @@
 <p>Views are used to get a defined subset and collection of data from different relations. All views are nemed with a prefix <code>vw_</code>.</p>
 <div id="time-dependent-data" class="section level3">
 <h3>Time dependent data</h3>
-<p>For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the lut_tree_state table:</p>
+<p>For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the <code>lut_tree_state</code> table:</p>
 <pre class="sql"><code>CREATE VIEW vw_actual_tree_state AS
     SELECT id,tree_id,creator_id, max(date) AS date, state_id, remarks FROM tree_state
     GROUP BY tree_id;</code></pre>
 <p>Following views are implemented:</p>
 <ul>
 <li>vw_actual_tree_decomposition</li>
-<li>vw_actual_tree_dendroband^*^</li>
+<li>vw_actual_tree_dendroband<sup>1</sup></li>
 <li>vw_actual_tree_diameter</li>
-<li>vw_actual_tree_habitat^*^</li>
+<li>vw_actual_tree_habitat<sup>1</sup></li>
 <li>vw_actual_tree_height</li>
 <li>vw_actual_tree_lyingdeadwood</li>
 <li>vw_actual_tree_roost</li>
@@ -237,11 +237,11 @@
 <li>vw_actual_tree_state</li>
 <li>vw_actual_tree_vitality</li>
 </ul>
-<p>^*^Views with concatenated datafield.</p>
+<p><sup>1</sup>Views with concatenated datafield.</p>
 </div>
 <div id="all-trees-with-actual-parameters" class="section level3">
 <h3>All trees with actual parameters:</h3>
-<p>All living trees with the actual parameters and additional information from the species list. That is the view to visualize the active trees:</p>
+<p>All living trees with the actual parameters and additional information from the species list. Selection is done with the <code>state_id</code>. That is the view to visualize the active trees:</p>
 <pre class="sql"><code>CREATE VIEW &quot;vw_tree_living&quot; AS
 SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;creator_id&quot; AS &quot;creator_id&quot;, &quot;a&quot;.&quot;date&quot; AS &quot;first_date&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;,
     &quot;a&quot;.&quot;easting&quot; AS &quot;easting&quot;, &quot;a&quot;.&quot;northing&quot; AS &quot;northing&quot;, &quot;a&quot;.&quot;geomeasurement_id&quot; AS &quot;geomeasurement_id&quot;, &quot;a&quot;.&quot;status&quot; AS &quot;status&quot;, 
@@ -266,7 +266,7 @@ ORDER BY &quot;a&quot;.&quot;tree_id&quot;;</code></pre>
 </div>
 <div id="dead-trees" class="section level3">
 <h3>Dead trees</h3>
-<p>All dead trees (standing and lying) are composed respectivly with:</p>
+<p>All dead trees (standing and lying) are composed respectively with:</p>
 <pre class="sql"><code>CREATE VIEW &quot;vw_tree_dead&quot; AS
 SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;creator_id&quot; AS &quot;creator_id&quot;, &quot;a&quot;.&quot;date&quot; AS &quot;first_date&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;,
     &quot;a&quot;.&quot;easting&quot; AS &quot;easting&quot;, &quot;a&quot;.&quot;northing&quot; AS &quot;northing&quot;, &quot;a&quot;.&quot;geomeasurement_id&quot; AS &quot;geomeasurement_id&quot;, &quot;a&quot;.&quot;status&quot; AS &quot;status&quot;, 
@@ -292,7 +292,7 @@ ORDER BY &quot;a&quot;.&quot;tree_id&quot;;</code></pre>
 </div>
 <div id="tree-history" class="section level3">
 <h3>Tree history</h3>
-<p>The history in changing of the tree_state is compiled with concatenated fields:</p>
+<p>The history in changing of the <code>tree_state</code> is compiled with concatenated fields:</p>
 <pre class="sql"><code>CREATE VIEW &quot;vw_tree_history&quot; AS
 SELECT &quot;a&quot;.&quot;id&quot; AS &quot;id&quot;, &quot;a&quot;.&quot;tree_id&quot; AS &quot;tree_id&quot;, &quot;a&quot;.&quot;creator_id&quot; AS &quot;creator_id&quot;, &quot;a&quot;.&quot;date&quot; AS &quot;first_date&quot;, &quot;a&quot;.&quot;species_id&quot; AS &quot;species_id&quot;,
     &quot;a&quot;.&quot;easting&quot; AS &quot;easting&quot;, &quot;a&quot;.&quot;northing&quot; AS &quot;northing&quot;, &quot;a&quot;.&quot;geomeasurement_id&quot; AS &quot;geomeasurement_id&quot;, &quot;a&quot;.&quot;status&quot; AS &quot;status&quot;, 
@@ -355,7 +355,7 @@ Order By plot_diary_id;</code></pre>
 <li>dendro-ecology - de</li>
 <li>pasture structure - ps</li>
 </ul>
-<p>All general information for a forest structure plot is determined with:</p>
+<p>For example all general information for a forest structure plot is determined with:</p>
 <pre class="sql"><code>CREATE VIEW &quot;vw_plot_fs&quot; AS
 SELECT a.&quot;id&quot; AS &quot;id&quot;, a.&quot;plot_id&quot; AS &quot;plot_id&quot;, a.&quot;plottype_id&quot; AS &quot;plottype_id&quot;, a.&quot;creator_id&quot; AS &quot;creator_id&quot;, a.&quot;status&quot; AS &quot;status&quot;,
     a.&quot;date&quot; AS &quot;dateFirstSurvey&quot;, a.&quot;slope&quot; AS &quot;slope&quot;, a.&quot;aspect&quot; AS &quot;aspect&quot;, a.&quot;angle&quot; AS &quot;angle&quot;, a.&quot;xlength&quot; AS &quot;xlength&quot;, a.&quot;ylength&quot; AS &quot;ylength&quot;,
@@ -363,6 +363,7 @@ SELECT a.&quot;id&quot; AS &quot;id&quot;, a.&quot;plot_id&quot; AS &quot;plot_i
 FROM &quot;plot&quot; As a
 WHERE a.plottype_id = &#39;fs&#39;
 Order By a.plot_id;</code></pre>
+<p>For more information on the various plots see the <a href="https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/">plot section</a>.</p>
 </div>
 </div>
 

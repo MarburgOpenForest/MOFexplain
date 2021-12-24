@@ -11,8 +11,8 @@ tags:
   - experiment
   - data
 subtitle: ''
-description: ''
-image: ''
+description: 'Various plot designs in the MOF'
+image: ' img/DJI_0264.JPG'
 toc: yes
 output:
   blogdown::html_page:
@@ -22,7 +22,7 @@ weight: 100
 # Survey Plots
 
 ### Forest Structure -- fs
-Plots for surveying forest structure are setup by various student groups since 2017. The decision where to set up a plot follows no random or systematic scheme (what a pitty!) but is somehow accidential.
+Plots for surveying forest structure are setup by various student groups since 2017. The decision where to set up a plot follows no random or systematic scheme (what a pitty!) but is somehow accidental.
 
 General characteristics are:
 * circular 10m radius in horizontal plane
@@ -30,10 +30,14 @@ General characteristics are:
 * aspect
 * remarks on special items
 
-All plots are marked with a central point (stored in `topopoint`, see fig x). 
+All plots are marked with a central point (stored in `topopoint` (see figure \@ref(fig:benchmark-fig)).
+
+```{r benchmark-fig, echo=FALSE, fig.align='center', fig.cap='Benchmark', fig.alt='Benchmark'}
+knitr::include_graphics("images/benchmark.png")
+```
 
 On the plot following items are surveyed depending on time:
-* all trees from 7 cm dbh
+* coordinates of all trees from 7 cm dbh
 * species
 * dbh
 * optional
@@ -42,6 +46,16 @@ On the plot following items are surveyed depending on time:
   * vitality
   * social position
   
-A plot from data out of MOFgeoDB is shown in fig. xx.
+A plot from data out of MOFgeoDB is shown in figure \@ref(fig:fs-plot-fig).
 
-All plots are visited sporadically.
+```{r fs-plot-fig, echo=FALSE, fig.align='center', fig.cap='fs-004 as example for the visualization of the plot data in QGIS.', fig.alt='Example of fs-plot'}
+knitr::include_graphics("images/fs-004_plotExample.png")
+```
+In real the plot looks something like this:
+```{r fs-004-summerPano-fig, echo=FALSE, fig.align='center', fig.cap='Panoramic view of fs-004 in summer.', fig.alt='SUmmer pano of fs-004'}
+knitr::include_graphics("images/fs-004_summerPano.jpg")
+```
+
+
+
+All plots are visited sporadically. The locations are shown in figure XXX

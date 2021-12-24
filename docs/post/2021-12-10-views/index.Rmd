@@ -9,7 +9,7 @@ categories:
 tags:
   - database
 subtitle: ''
-description: ''
+description: 'Views are used to get a defined subset and collection of data from different relations.'
 image: ''
 toc: yes
 output:
@@ -21,7 +21,7 @@ weight: 100
 Views are used to get a defined subset and collection of data from different relations. All views are nemed with a prefix `vw_`.
 
 ### Time dependent data
-For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the lut_tree_state table:
+For all time dependent data views on the actual dataset is implement to get a single 1:1 connection. For example the view on the `lut_tree_state` table:
 ```sql
 CREATE VIEW vw_actual_tree_state AS
     SELECT id,tree_id,creator_id, max(date) AS date, state_id, remarks FROM tree_state
@@ -30,9 +30,9 @@ CREATE VIEW vw_actual_tree_state AS
 Following views are implemented:
 
 * vw_actual_tree_decomposition
-* vw_actual_tree_dendroband^*^
+* vw_actual_tree_dendroband^1^
 * vw_actual_tree_diameter
-* vw_actual_tree_habitat^*^
+* vw_actual_tree_habitat^1^
 * vw_actual_tree_height
 * vw_actual_tree_lyingdeadwood
 * vw_actual_tree_roost
@@ -40,10 +40,10 @@ Following views are implemented:
 * vw_actual_tree_state
 * vw_actual_tree_vitality
 
-^*^Views with concatenated datafield.
+^1^Views with concatenated datafield.
 
 ### All trees with actual parameters:
-All living trees with the actual parameters and additional information from the species list. That is the view to visualize the active trees:
+All living trees with the actual parameters and additional information from the species list. Selection is done with the `state_id`. That is the view to visualize the active trees:
 ```sql
 CREATE VIEW "vw_tree_living" AS
 SELECT "a"."id" AS "id", "a"."tree_id" AS "tree_id", "a"."creator_id" AS "creator_id", "a"."date" AS "first_date", "a"."species_id" AS "species_id",
@@ -69,7 +69,7 @@ ORDER BY "a"."tree_id";
 ```
 
 ### Dead trees
-All dead trees (standing and lying) are composed respectivly with:
+All dead trees (standing and lying) are composed respectively with:
 ```sql
 CREATE VIEW "vw_tree_dead" AS
 SELECT "a"."id" AS "id", "a"."tree_id" AS "tree_id", "a"."creator_id" AS "creator_id", "a"."date" AS "first_date", "a"."species_id" AS "species_id",
@@ -96,7 +96,7 @@ ORDER BY "a"."tree_id";
 ```
 
 ### Tree history
-The history in changing of the tree_state is compiled with concatenated fields:
+The history in changing of the `tree_state` is compiled with concatenated fields:
 ```sql
 CREATE VIEW "vw_tree_history" AS
 SELECT "a"."id" AS "id", "a"."tree_id" AS "tree_id", "a"."creator_id" AS "creator_id", "a"."date" AS "first_date", "a"."species_id" AS "species_id",
@@ -162,7 +162,7 @@ The different types of plots are distinguished with various views. Following typ
 * dendro-ecology - de
 * pasture structure - ps
 
-All general information for a forest structure plot is determined with:
+For example all general information for a forest structure plot is determined with:
 ```sql
 CREATE VIEW "vw_plot_fs" AS
 SELECT a."id" AS "id", a."plot_id" AS "plot_id", a."plottype_id" AS "plottype_id", a."creator_id" AS "creator_id", a."status" AS "status",
@@ -172,3 +172,4 @@ FROM "plot" As a
 WHERE a.plottype_id = 'fs'
 Order By a.plot_id;
 ```
+For more information on the various plots see the [plot section](https://marburgopenforest.github.io/MOFexplain/post/2021-12-10-plots/).
