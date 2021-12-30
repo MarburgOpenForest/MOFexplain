@@ -12,7 +12,7 @@ tags:
   - data
 subtitle: ''
 description: 'Various plot designs in the MOF'
-image: ' img/DJI_0264.JPG'
+image: 'img/DJI_0264.JPG'
 toc: yes
 output:
   blogdown::html_page:
@@ -30,7 +30,7 @@ General characteristics are:
 * aspect
 * remarks on special items
 
-All plots are marked with a central point (stored in `topopoint` (see figure \@ref(fig:benchmark-fig)).
+All plots are marked with a central point (stored in `topopoint`, see figure \@ref(fig:benchmark-fig)).
 
 ```{r benchmark-fig, echo=FALSE, fig.align='center', fig.cap='Benchmark', fig.alt='Benchmark'}
 knitr::include_graphics("images/benchmark.png")
@@ -52,10 +52,28 @@ A plot from data out of MOFgeoDB is shown in figure \@ref(fig:fs-plot-fig).
 knitr::include_graphics("images/fs-004_plotExample.png")
 ```
 In real the plot looks something like this:
-```{r fs-004-summerPano-fig, echo=FALSE, fig.align='center', fig.cap='Panoramic view of fs-004 in summer.', fig.alt='SUmmer pano of fs-004'}
+```{r fs-004-summerPano-fig, echo=FALSE, fig.align='center', fig.cap='Panoramic view of fs-004 in summer.', fig.alt='Summer pano of fs-004'}
 knitr::include_graphics("images/fs-004_summerPano.jpg")
 ```
 
-
-
 All plots are visited sporadically. The locations are shown in figure XXX
+
+```{r setup, include=FALSE}
+library(sf)
+library(mapview)
+```
+
+
+```{r echo=FALSE}
+# load plots
+plots <- st_read("https://github.com/MarburgOpenForest/MOFGeoDB/blob/master/MOFgeoDB.sqlite?raw=true", quiet = T, layer = "vw_plot_fs")
+
+plots %>% 
+  mapview(
+    map.types = "OpenStreetMap", 
+    color = "grey20",
+    lwd = 1,
+    label = plots$plot_id,
+    layer.name = "fs-plots")
+```
+

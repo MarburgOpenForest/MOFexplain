@@ -12,7 +12,7 @@ tags:
   - data
 subtitle: ''
 description: 'Various plot designs in the MOF'
-image: ' img/DJI_0264.JPG'
+image: 'img/DJI_0264.JPG'
 toc: yes
 output:
   blogdown::html_page:
